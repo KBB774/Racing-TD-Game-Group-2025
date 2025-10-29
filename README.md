@@ -8,4 +8,4 @@ Our Team!
 - Mark Connell
 - Henry Griffin
 
-![Game Plan] (https://github.com/KBB774/Racing-TD-Game-Group-2025/blob/main/images/gameplanfinaldrawio.png?raw=true)
+![Game Plan](https://github.com/KBB774/Racing-TD-Game-Group-2025/blob/main/images/gameplanfinaldrawio.png?raw=true)
