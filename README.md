@@ -3,7 +3,7 @@
 ### With our powerups and obstacles, you will have to evade!
 
 Our Team!
-- __Kellen Brim__
+- __Kellen Brim__ (Team Lead)
 - __Zac Hawkins__
 - __Mark Connell__
 - __Henry Griffin__
