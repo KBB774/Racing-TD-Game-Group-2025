@@ -1,4 +1,4 @@
-//Kellen Brim, Mark Connell, Zac Hawkins, Henry Griffin
+//Kellen Brim
 int playerX, playerY, speed, worldWidth, worldHeight;
 
 void setup() {
