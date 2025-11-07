@@ -11,4 +11,4 @@ Our Team!
 ![Game Plan](https://github.com/KBB774/Racing-TD-Game-Group-2025/blob/main/images/gameplanfinaldrawio.png?raw=true)
 ![Timeline](https://github.com/KBB774/Racing-TD-Game-Group-2025/blob/main/images/Timeline.png?raw=true)
 ![GUI Mockup](https://github.com/KBB774/Racing-TD-Game-Group-2025/blob/main/images/GUI%20Mockup.png?raw=true)
-![Logo Mockup](https://github.com/KBB774/Racing-TD-Game-Group-2025/blob/main/images/Logo%20Mockup.png?raw=true)
+![Logo Mockup](https://github.com/KBB774/Racing-TD-Game-Group-2025/blob/main/images/StartScreen.png?raw=true)
