@@ -4,7 +4,7 @@ PImage blue;
 
 void setup() {
   size (1920, 1080);
-  background(150, 400, 800);
+  background(128,126,120);
   speed = 5;
   playerX = 500;
   playerY = 500;
@@ -14,7 +14,7 @@ void setup() {
 }
 
 void draw() {
-  background(150, 400, 800);
+  background(128,126,120);
 
 
   translate(width/2 - playerX, height/2 - playerY);
