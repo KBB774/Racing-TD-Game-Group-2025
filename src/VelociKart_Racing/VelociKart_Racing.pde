@@ -1,31 +1,43 @@
 //Kellen Brim, Mark Connell, Zac Hawkins, Henry Griffin
 int playerX, playerY, speed, worldWidth, worldHeight;
-PImage blue;
+PImage blue, blue_right, blue_left, blue_down;
 
 void setup() {
   size (1920, 1080);
-  background(128,126,120);
+  background(128, 126, 120);
   speed = 5;
   playerX = 500;
   playerY = 500;
   worldWidth = 2560;
   worldHeight = 1440;
   blue = loadImage("bluecar.png");
+  blue_right = loadImage("bluecar_right.png");
+   blue_left = loadImage("bluecar_left.png");
+   blue_down = loadImage("bluecar_down.png");
 }
 
 void draw() {
-  background(128,126,120);
+  background(128, 126, 120);
 
 
   translate(width/2 - playerX, height/2 - playerY);
-  image(blue,playerX,playerY);
-  
-   if (keyPressed) {
+  imageMode(CENTER);
+
+  if (keyPressed) {
     if (key == 'w' || keyCode == UP) playerY -= speed;
+     if (key == 'w' || keyCode == UP) image(blue, playerX, playerY);
     if (key == 's' || keyCode == DOWN) playerY += speed;
+    if (key == 's' || keyCode == DOWN) image(blue_down, playerX, playerY);
     if (key == 'a' || keyCode == LEFT) playerX -= speed;
+    if (key == 'a' || keyCode == LEFT) image(blue_left, playerX, playerY);
     if (key == 'd' || keyCode == RIGHT) playerX += speed;
+   if (key == 'd' || keyCode == RIGHT) image(blue_right, playerX, playerY);
+   if (key == 'd' || keyCode == RIGHT);
+  
+    
   }
+
+  
 
   drawWorld();
 
