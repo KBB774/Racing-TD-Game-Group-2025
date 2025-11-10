@@ -1,4 +1,4 @@
-class PowerUp {}
+class Powerup {}
   // member variables
   
   //constructor
