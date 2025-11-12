@@ -2,7 +2,7 @@
 int playerX, playerY, speed, worldWidth, worldHeight;
 PImage blue, blue_right, blue_left, blue_down, racetrack_1;
 PImage currentCar; // Track the car's current direction
-
+Enemy e1;
 
 void setup() {
   size (1920, 1080);
@@ -12,7 +12,7 @@ void setup() {
   playerY = 500;
   worldWidth = 2250;
   worldHeight = 2000;
-  
+  e1 = new Ememy();
   // Images
   blue = loadImage("bluecar.png");
   blue_right = loadImage("bluecar_right.png");
@@ -30,7 +30,7 @@ void draw() {
   background(128, 126, 120);
   translate(width/2 - playerX, height/2 - playerY);
   imageMode(CENTER);
-  
+  e1.display();
 
   // Movement and direction
   if (keyPressed) {
