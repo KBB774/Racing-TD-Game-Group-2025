@@ -12,7 +12,7 @@ void setup() {
   playerY = 500;
   worldWidth = 2250;
   worldHeight = 2000;
-  e1 = new Ememy();
+  e1 = new Enemy();
   // Images
   blue = loadImage("bluecar.png");
   blue_right = loadImage("bluecar_right.png");
