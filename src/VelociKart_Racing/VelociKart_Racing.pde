@@ -1,6 +1,6 @@
 //Kellen Brim, Mark Connell, Zac Hawkins, Henry Griffin
 int playerX, playerY, speed, worldWidth, worldHeight;
-PImage blue, blue_right, blue_left, blue_down, racetrack_1;
+PImage blue, blue_right, blue_left, blue_down, racetrack_1, nitro;
 PImage currentCar; // Track the car's current direction
 Enemy e1;
 
@@ -19,7 +19,7 @@ void setup() {
   blue_left = loadImage("bluecar_left.png");
   blue_down = loadImage("bluecar_down.png");
   racetrack_1 = loadImage("racetrackfinal (1).png");
-  
+  nitro = loadImage("Nitro.png");
   
   // Default facing up
   currentCar = blue;
