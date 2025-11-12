@@ -10,8 +10,8 @@ void setup() {
   speed = 10;
   playerX = 500;
   playerY = 500;
-  worldWidth = 2560;
-  worldHeight = 1440;
+  worldWidth = 2250;
+  worldHeight = 2000;
   
   // Images
   blue = loadImage("bluecar.png");
@@ -30,6 +30,7 @@ void draw() {
   background(128, 126, 120);
   translate(width/2 - playerX, height/2 - playerY);
   imageMode(CENTER);
+  
 
   // Movement and direction
   if (keyPressed) {
@@ -56,13 +57,13 @@ void draw() {
   image(currentCar, playerX, playerY);
 
   // Keep player within world bounds
-  playerX = constrain(playerX, 0, worldWidth);
-  playerY = constrain(playerY, 0, worldHeight);
+  playerX = constrain(playerX, 0, 2250);
+  playerY = constrain(playerY, 0, 2000);
 }
 
 void drawWorld() {
+   imageMode(CORNER);
   image(racetrack_1,0,0);
-  imageMode(CORNER);
   for (int x = 0; x < worldWidth; x += 100) {
     line(x, 0, x, worldHeight);
   }
