@@ -11,19 +11,19 @@ class Button {
   }
 
   void display() {
-    fill(255,0,0);
+    fill(255, 0, 0);
     stroke(0);
     strokeWeight(5);
-    rect(x, y, w, h, 10);  
+    rect(x, y, w, h, 10);
 
     fill(255);
     textAlign(CENTER, CENTER);
-    textSize(50);
-    text(label, x + w/2, y + h/2);  
+    textSize(100);
+    text(label, x + w/2, y + h/2);
   }
 
   boolean clicked() {
     return (mouseX > x && mouseX < x+w &&
-            mouseY > y && mouseY < y+h);
+      mouseY > y && mouseY < y+h);
   }
 }
