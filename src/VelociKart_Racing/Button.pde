@@ -14,13 +14,13 @@ class Button {
   }
 
   void display() {
-    fill(255);
+    fill(255,0,0);
     stroke(0);
-    rect(x, y, w, h, 10);
+    rect(x, y, w, h+10, 100);
 
-    fill(0);
+    fill(255);
     textAlign(CENTER, CENTER);
-    textSize(16);
+    textSize(50);
     text(label, x + w/2, y + h/2);
   }
 
