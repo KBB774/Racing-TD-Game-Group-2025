@@ -25,10 +25,10 @@ boolean aDown = false;
 boolean dDown = false;
 
 void setup() {
-  size(1920, 1080, P2D);   // P2D = NO rotation lag
+  size(1536, 1024);   // P2D = NO rotation lag
   background(85, 197, 115);
 
-  btnStart    = new Button("PLAY", 220, 150, 160, 50);
+  btnStart    = new Button("PLAY", 460, 830, 600, 100);
   btnMenu    = new Button("MENU", 220, 300, 160, 50);
 btnRestart = new Button("Restart",220,150, 160, 50);
 
@@ -39,12 +39,12 @@ btnRestart = new Button("Restart",220,150, 160, 50);
   worldHeight = 2000;
 
   e1 = new Enemy();
-n1 = new PowerUp
+//n1 = new PowerUp();
   // Images
   blue = loadImage("bluecar_right.png");     // MUST FACE UP
   racetrack_1 = loadImage("racetrackfinal (1).png");
   nitro = loadImage("Nitro.png");
-  start = loadImage("StartScreen.png");
+  start = loadImage("StartScreen (1).png");
 
   currentCar = blue;
 }
@@ -62,9 +62,6 @@ void draw() {
     case 'p' :
       drawPlay();
       break;
-case 'g' : 
-drawRestart();
-break;
     }
 
     // CAMERA CENTER
@@ -72,7 +69,7 @@ break;
 
     imageMode(CENTER);
     e1.display();
-n1 = new PowerUp();
+//n1 = new PowerUp();
     // -------- TURN ANYTIME --------
     if (aDown) angle -= turnSpeed;
     if (dDown) angle += turnSpeed;
@@ -115,13 +112,9 @@ void drawWorld() {
   fill(255);
   text("score: ", height-30, width-30);
 
-  for (int x = 0; x < worldWidth; x += 100) {
-    line(x, 0, x, worldHeight);
-  }
-  for (int y = 0; y < worldHeight; y += 100) {
-    line(0, y, worldWidth, y);
-  }
+  // Grid removed
 }
+
 
 //void startScreen() {
 //  imageMode(CENTER);
