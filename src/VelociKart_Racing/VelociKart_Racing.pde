@@ -6,11 +6,11 @@ boolean play;
 import gifAnimation.*;
 Gif title;
 Enemy e1;
-HUD h1;
+
 
 
 void setup() {
-  size (1536, 1024);
+  size (1920, 1080);
  // fullScreen();
   background(128, 126, 120);
   speed = 10;
@@ -19,7 +19,7 @@ void setup() {
   worldWidth = 2250;
   worldHeight = 2000;
   e1 = new Enemy();
-  h1 = new HUD();
+ 
   // Images
   blue = loadImage("bluecar.png");
   blue_right = loadImage("bluecar_right.png");
@@ -43,7 +43,7 @@ void draw() {
   translate(width/2 - playerX, height/2 - playerY);
   imageMode(CENTER);
   e1.display();
-  h1.display();
+ 
 
   // Movement and direction
   if (keyPressed) {
