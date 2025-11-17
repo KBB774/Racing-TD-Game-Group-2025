@@ -1,114 +1,120 @@
 //Kellen Brim, Mark Connell, Zac Hawkins, Henry Griffin
 
-import gifAnimation.*;
+int playerX, playerY;
+int speed, worldWidth, worldHeight;
 
+PImage blue, racetrack_1, nitro, start;
+PImage currentCar;
+
+boolean play;
+
+import gifAnimation.*;
+Gif title;
 Enemy e1;
 
-// WORLD SIZE
-int worldWidth = 2250;
-int worldHeight = 2000;
+// ROTATION + SMOOTH TURN SUPPORT
+float angle = 0;
+float turnSpeed = 4;
 
-// PLAYER
-PVector playerPos;
-float angle = 0;           // rotation angle
-
-float speed = 10;          // constant movement speed
-float turnSpeed = 4;       // how fast the car rotates
-
-// KEYS
+// Key states (lets W + A work at the same time)
 boolean wDown = false;
 boolean sDown = false;
 boolean aDown = false;
 boolean dDown = false;
 
-// IMAGES
-PImage carImage;
-PImage racetrack_1;
-PImage nitro;
-PImage start;
-
-boolean play = false;
-
 void setup() {
-  size(1920, 1080, P2D);   // GPU renderer — prevents rotation lag
+  size(1920, 1080, P2D);   // P2D = NO rotation lag
+  background(128, 126, 120);
+  
+  speed = 10;
+  playerX = 500;
+  playerY = 500;
+  worldWidth = 2250;
+  worldHeight = 2000;
 
-  playerPos = new PVector(500, 500);
   e1 = new Enemy();
 
-  // Load images
-  carImage = loadImage("bluecar_right.png");  // car must face UP
+  // Images
+  blue = loadImage("bluecar_right.png");     // MUST FACE UP
   racetrack_1 = loadImage("racetrackfinal (1).png");
   nitro = loadImage("Nitro.png");
   start = loadImage("StartScreen.png");
+
+  currentCar = blue;
 }
 
 void draw() {
-
-  // ---- START SCREEN ----
   if (!play) {
     startScreen();
-    return;
+  } else {
+    background(128, 126, 120);
+
+    // CAMERA CENTER
+    translate(width/2 - playerX, height/2 - playerY);
+
+    imageMode(CENTER);
+    e1.display();
+
+    // -------- TURN ANYTIME --------
+    if (aDown) angle -= turnSpeed;
+    if (dDown) angle += turnSpeed;
+
+    float rad = radians(angle);
+
+    // -------- MOVE --------
+    if (wDown) {
+      playerX += cos(rad) * speed;
+      playerY += sin(rad) * speed;
+    }
+    if (sDown) {
+      playerX -= cos(rad) * speed;
+      playerY -= sin(rad) * speed;
+    }
+
+    // -------- DRAW WORLD + CAR --------
+    drawWorld();
+    drawCar();
+
+    // WORLD LIMITS
+    playerX = constrain(playerX, 0, worldWidth);
+    playerY = constrain(playerY, 0, worldHeight);
   }
-
-  background(128);
-
-  // Camera follows player
-  translate(width/2 - playerPos.x, height/2 - playerPos.y);
-
-  // ---- TURN (EVEN WHILE MOVING) ----
-  if (aDown) angle -= turnSpeed;
-  if (dDown) angle += turnSpeed;
-
-  // ---- MOVE ----
-  float rad = radians(angle);
-
-  if (wDown) {
-    playerPos.x += cos(rad) * speed;
-    playerPos.y += sin(rad) * speed;
-  }
-  if (sDown) {
-    playerPos.x -= cos(rad) * speed;
-    playerPos.y -= sin(rad) * speed;
-  }
-
-  // ---- KEEP CAR IN WORLD ----
-  playerPos.x = constrain(playerPos.x, 0, worldWidth);
-  playerPos.y = constrain(playerPos.y, 0, worldHeight);
-
-  // ---- DRAW WORLD & ENEMY ----
-  drawWorld();
-  e1.display();
-
-  // ---- DRAW CAR ----
-  drawCar();
-}
-
-
-// -------------------- DRAW FUNCTIONS --------------------
-
-void drawWorld() {
-  imageMode(CORNER);
-  image(racetrack_1, 0, 0);
-
-  // optional grid
-  stroke(255, 20);
-  for (int x = 0; x < worldWidth; x += 100)
-    line(x, 0, x, worldHeight);
-  for (int y = 0; y < worldHeight; y += 100)
-    line(0, y, worldWidth, y);
 }
 
 void drawCar() {
   pushMatrix();
-  translate(playerPos.x, playerPos.y);
+  translate(playerX, playerY);
   rotate(radians(angle));
   imageMode(CENTER);
-  image(carImage, 0, 0);
+  image(currentCar, 0, 0);
   popMatrix();
 }
 
+void drawWorld() {
+  imageMode(CORNER);
+  image(racetrack_1, 0, 0);
+  textSize(100);
+  fill(255);
+  text("score: ", height-30, width-30);
 
-// -------------------- INPUT HANDLING --------------------
+  for (int x = 0; x < worldWidth; x += 100) {
+    line(x, 0, x, worldHeight);
+  }
+  for (int y = 0; y < worldHeight; y += 100) {
+    line(0, y, worldWidth, y);
+  }
+}
+
+void startScreen() {
+  imageMode(CENTER);
+  background(start);
+  fill(255);
+  if (mousePressed) {
+    play = true;
+  }
+}
+
+// ------------------- KEY INPUT HANDLERS -------------------
 
 void keyPressed() {
   if (key == 'w' || keyCode == UP)    wDown = true;
@@ -122,22 +128,4 @@ void keyReleased() {
   if (key == 's' || keyCode == DOWN)  sDown = false;
   if (key == 'a' || keyCode == LEFT)  aDown = false;
   if (key == 'd' || keyCode == RIGHT) dDown = false;
-}
-
-
-// -------------------- START SCREEN --------------------
-
-void startScreen() {
-  background(0);
-  imageMode(CENTER);
-  image(start, width/2, height/2);
-
-  fill(255);
-  textSize(50);
-  textAlign(CENTER);
-  text("Click to Start", width/2, height - 150);
-
-  if (mousePressed) {
-    play = true;
-  }
 }
