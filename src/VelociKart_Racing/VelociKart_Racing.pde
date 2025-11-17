@@ -2,8 +2,9 @@
 
 int playerX, playerY;
 int speed, worldWidth, worldHeight;
-char screen = 's';   // s = start, m = menu, t = settings, p = play, u = pause, g = game over, a = app stats
-Button btnStart, btnMenu, btnSettings, btnBack;
+char screen = 's';   // s = start, p = play, t = settings
+
+Button btnStart, btnSettings, btnBack;
 
 PImage blue, racetrack_1, nitro, start;
 PImage currentCar;
@@ -28,8 +29,10 @@ void setup() {
   size(1920, 1080, P2D);   // P2D = NO rotation lag
   background(85, 197, 115);
 
-  btnStart    = new Button("PLAY", 220, 150, 160, 50);
-  btnMenu    = new Button("MENU", 220, 300, 160, 50);
+  // BUTTONS
+  btnStart    = new Button("PLAY",     width/2, 600, 300, 100);
+  btnSettings = new Button("SETTINGS", width/2, 760, 300, 100);
+  btnBack     = new Button("BACK",     200, 100, 200, 80);
 
   speed = 10;
   playerX = 500;
@@ -40,7 +43,7 @@ void setup() {
   e1 = new Enemy();
 
   // Images
-  blue = loadImage("bluecar_right.png");     // MUST FACE UP
+  blue = loadImage("bluecar_right.png");
   racetrack_1 = loadImage("racetrackfinal (1).png");
   nitro = loadImage("Nitro.png");
   start = loadImage("StartScreen.png");
@@ -49,50 +52,54 @@ void setup() {
 }
 
 void draw() {
-  if (!play) {
+
+  switch(screen) {
+
+  case 's':   // START SCREEN
     drawStart();
-  } else {
-    background(85, 197, 115);
+    break;
 
-    switch(screen) {
-    case 's' :
-      drawStart();
-      break;
-    case 'p' :
-      drawPlay();
-      break;
-    }
+  case 't':   // SETTINGS SCREEN
+    drawSettings();
+    break;
 
-    // CAMERA CENTER
-    translate(width/2 - playerX, height/2 - playerY);
-
-    imageMode(CENTER);
-    e1.display();
-
-    // -------- TURN ANYTIME --------
-    if (aDown) angle -= turnSpeed;
-    if (dDown) angle += turnSpeed;
-
-    float rad = radians(angle);
-
-    // -------- MOVE --------
-    if (wDown) {
-      playerX += cos(rad) * speed;
-      playerY += sin(rad) * speed;
-    }
-    if (sDown) {
-      playerX -= cos(rad) * speed;
-      playerY -= sin(rad) * speed;
-    }
-
-    // -------- DRAW WORLD + CAR --------
-    drawWorld();
-    drawCar();
-
-    // WORLD LIMITS
-    playerX = constrain(playerX, 0, worldWidth);
-    playerY = constrain(playerY, 0, worldHeight);
+  case 'p':   // GAME
+    drawPlay();
+    break;
   }
+}
+
+// ----------------------------------------------------
+// ------------------ GAME SCREEN ----------------------
+// ----------------------------------------------------
+void drawPlay() {
+  background(85, 197, 115);
+
+  // CAMERA
+  translate(width/2 - playerX, height/2 - playerY);
+
+  imageMode(CENTER);
+  e1.display();
+
+  if (aDown) angle -= turnSpeed;
+  if (dDown) angle += turnSpeed;
+
+  float rad = radians(angle);
+
+  if (wDown) {
+    playerX += cos(rad) * speed;
+    playerY += sin(rad) * speed;
+  }
+  if (sDown) {
+    playerX -= cos(rad) * speed;
+    playerY -= sin(rad) * speed;
+  }
+
+  drawWorld();
+  drawCar();
+
+  playerX = constrain(playerX, 0, worldWidth);
+  playerY = constrain(playerY, 0, worldHeight);
 }
 
 void drawCar() {
@@ -107,28 +114,72 @@ void drawCar() {
 void drawWorld() {
   imageMode(CORNER);
   image(racetrack_1, 0, 0);
+
   textSize(100);
   fill(255);
   text("score: ", height-30, width-30);
 
-  for (int x = 0; x < worldWidth; x += 100) {
-    line(x, 0, x, worldHeight);
-  }
-  for (int y = 0; y < worldHeight; y += 100) {
-    line(0, y, worldWidth, y);
-  }
+  for (int x = 0; x < worldWidth; x += 100) line(x, 0, x, worldHeight);
+  for (int y = 0; y < worldHeight; y += 100) line(0, y, worldWidth, y);
 }
 
-//void startScreen() {
-//  imageMode(CENTER);
-//  background(start);
-//  fill(255);
-//  if (mousePressed) {
-//    play = true;
-//  }
-//}
+// ----------------------------------------------------
+// ------------------ START SCREEN ---------------------
+// ----------------------------------------------------
+void drawStart() {
+  background(start);
 
-// ------------------- KEY INPUT HANDLERS -------------------
+  textAlign(CENTER);
+  fill(255);
+  textSize(100);
+  
+  btnStart.display();
+  btnSettings.display();
+}
+
+// ----------------------------------------------------
+// ---------------- SETTINGS SCREEN --------------------
+// ----------------------------------------------------
+void drawSettings() {
+  background(40);
+
+  textAlign(CENTER);
+  fill(255);
+  textSize(80);
+  text("SETTINGS", width/2, 200);
+
+  textSize(40);
+  fill(200);
+  text("This is a placeholder settings screen.", width/2, 350);
+
+  btnBack.display();
+}
+
+// ----------------------------------------------------
+// ------------------- INPUT ---------------------------
+// ----------------------------------------------------
+void mousePressed() {
+
+  switch(screen) {
+
+  case 's':  // START SCREEN
+    if (btnStart.clicked()) {
+      play = true;
+      screen = 'p';
+    }
+
+    if (btnSettings.clicked()) {
+      screen = 't';
+    }
+    break;
+
+  case 't':  // SETTINGS SCREEN
+    if (btnBack.clicked()) {
+      screen = 's';
+    }
+    break;
+  }
+}
 
 void keyPressed() {
   if (key == 'w' || keyCode == UP)    wDown = true;
@@ -142,25 +193,4 @@ void keyReleased() {
   if (key == 's' || keyCode == DOWN)  sDown = false;
   if (key == 'a' || keyCode == LEFT)  aDown = false;
   if (key == 'd' || keyCode == RIGHT) dDown = false;
-}
-
-void mousePressed() {
-  switch(screen) {
-  case 's' :
-    if (btnStart.clicked()) {
-      play = true;
-    }
-  }
-}
-
-void drawStart() {
-  background(start);
-  textAlign(CENTER);
-  textSize(100);
-  btnStart.display();
-}
-
-void drawPlay() {
-  background(255);
-  text("PLAY SCREEN (fill this in)", 200, 200);
 }
