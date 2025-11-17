@@ -3,7 +3,7 @@
 int playerX, playerY;
 int speed, worldWidth, worldHeight;
 char screen = 's';   // s = start, m = menu, t = settings, p = play, u = pause, g = game over, a = app stats
-Button btnStart, btnMenu, btnSettings, btnBack;
+Button btnStart, btnMenu, btnSettings, btnBack, btnRestart;
 
 PImage blue, racetrack_1, nitro, start;
 PImage currentCar;
@@ -30,6 +30,7 @@ void setup() {
 
   btnStart    = new Button("PLAY", 220, 150, 160, 50);
   btnMenu    = new Button("MENU", 220, 300, 160, 50);
+btnRestart = new Button("Restart",220,150, 160, 50);
 
   speed = 10;
   playerX = 500;
@@ -38,7 +39,7 @@ void setup() {
   worldHeight = 2000;
 
   e1 = new Enemy();
-
+n1 = new PowerUp
   // Images
   blue = loadImage("bluecar_right.png");     // MUST FACE UP
   racetrack_1 = loadImage("racetrackfinal (1).png");
@@ -61,6 +62,9 @@ void draw() {
     case 'p' :
       drawPlay();
       break;
+case 'g' : 
+drawRestart();
+break;
     }
 
     // CAMERA CENTER
@@ -68,7 +72,7 @@ void draw() {
 
     imageMode(CENTER);
     e1.display();
-
+n1 = new PowerUp();
     // -------- TURN ANYTIME --------
     if (aDown) angle -= turnSpeed;
     if (dDown) angle += turnSpeed;
@@ -164,4 +168,7 @@ void drawStart() {
 void drawPlay() {
   background(85, 197, 115);
   //text("PLAY SCREEN (fill this in)", 200, 200);
+}
+void gameOver() {
+// btnRestart.display()
 }
