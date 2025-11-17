@@ -6,8 +6,6 @@ int speed, worldWidth, worldHeight;
 PImage blue, racetrack_1, nitro, start;
 PImage currentCar;
 
-// NEW
-PImage settingsPlaceholder;
 boolean play = false;
 boolean settingsMode = false;
 
@@ -42,9 +40,6 @@ void setup() {
   racetrack_1 = loadImage("racetrackfinal (1).png");
   nitro = loadImage("Nitro.png");
   start = loadImage("StartScreen.png");
-
-  // NEW placeholder settings image
-  settingsPlaceholder = loadImage("settings_placeholder.png");
 
   currentCar = blue;
 }
@@ -116,7 +111,7 @@ void drawWorld() {
 }
 
 // -----------------------------------------------
-// START SCREEN + SETTINGS BUTTON
+// START SCREEN WITH SETTINGS BUTTON
 // -----------------------------------------------
 void startScreen() {
   imageMode(CENTER);
@@ -151,21 +146,25 @@ void startScreen() {
 }
 
 // -----------------------------------------------
-// SETTINGS SCREEN
+// SETTINGS SCREEN (NO IMAGE — JUST BACKGROUND)
 // -----------------------------------------------
 void settingsScreen() {
-  background(50);
+  background(30, 30, 30);  // Dark gray background
 
-  imageMode(CENTER);
-  image(settingsPlaceholder, width/2, height/2);
+  textAlign(CENTER);
+  fill(255);
+  textSize(80);
+  text("SETTINGS", width/2, 200);
+
+  textSize(40);
+  fill(200);
+  text("This is a placeholder settings screen.", width/2, 350);
 
   // BACK BUTTON
   rectMode(CENTER);
   fill(0, 150);
   rect(150, 80, 200, 80);
   fill(255);
-  textSize(40);
-  textAlign(CENTER);
   text("BACK", 150, 95);
 
   if (mousePressed) {
