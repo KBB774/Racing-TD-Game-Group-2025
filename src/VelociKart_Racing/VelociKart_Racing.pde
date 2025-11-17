@@ -4,6 +4,7 @@ int playerX, playerY;
 int speed, worldWidth, worldHeight;
 char screen = 's';   // s = start, m = menu, t = settings, p = play, u = pause, g = game over, a = app stats
 Button btnStart, btnMenu, btnSettings, btnBack, btnRestart;
+PFont font;
 
 PImage blue, racetrack_1, nitro, start;
 PImage currentCar;
@@ -27,10 +28,12 @@ boolean dDown = false;
 void setup() {
   size(1536, 1024);   // P2D = NO rotation lag
   background(85, 197, 115);
+  font = createFont("RasterForgeRegular-JpBgm.ttf", 30);
+  textFont(font);
 
   btnStart    = new Button("PLAY", 460, 830, 600, 100);
   btnMenu    = new Button("MENU", 220, 300, 160, 50);
-btnRestart = new Button("Restart",220,150, 160, 50);
+  btnRestart = new Button("Restart", 220, 150, 160, 50);
 
   speed = 10;
   playerX = 500;
@@ -39,7 +42,7 @@ btnRestart = new Button("Restart",220,150, 160, 50);
   worldHeight = 2000;
 
   e1 = new Enemy();
-//n1 = new PowerUp();
+  //n1 = new PowerUp();
   // Images
   blue = loadImage("bluecar_right.png");     // MUST FACE UP
   racetrack_1 = loadImage("racetrackfinal (1).png");
@@ -69,7 +72,7 @@ void draw() {
 
     imageMode(CENTER);
     e1.display();
-//n1 = new PowerUp();
+    //n1 = new PowerUp();
     // -------- TURN ANYTIME --------
     if (aDown) angle -= turnSpeed;
     if (dDown) angle += turnSpeed;
@@ -163,5 +166,5 @@ void drawPlay() {
   //text("PLAY SCREEN (fill this in)", 200, 200);
 }
 void gameOver() {
-// btnRestart.display()
+  // btnRestart.display()
 }
