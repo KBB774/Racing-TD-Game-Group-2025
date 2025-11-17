@@ -1,1 +1,142 @@
+// -------------------------------------------
+// GLOBALS
+// -------------------------------------------
+char screen = 's';   // s = start, m = menu, t = settings, p = play, u = pause, g = game over, a = app stats
+Button btnStart, btnMenu, btnSettings, btnBack, btnPause, btnPlay, btnResume;
+
+// -------------------------------------------
+void setup() {
+  size(600, 400);
+
+  // Buttons
+  btnStart  = new Button("Start", 220, 140, 160, 50);
+  btnMenu   = new Button("Menu", 220, 120, 160, 50);
+  btnPlay   = new Button("Play", 220, 200, 160, 50);
+  btnPause  = new Button("Pause", 20, 20, 100, 40);
+  btnResume = new Button("Resume", 220, 260, 160, 50);
+}
+
+// -------------------------------------------
+void draw() {
+  background(230);
+  switch(screen) {
+  case 's':
+    drawStart();
+    break;
+  case 'm':
+    drawMenu();
+    break;
+  case 'p':
+    drawPlay();
+    break;
+  case 'u':
+    drawPause();
+    break;
+  }
+}
+
+
+
+//btnStart.display();
+//btnMenu.display();
+//btnSettings.display();
+
+// -------------------------------------------
+// MOUSE CLICK HANDLER
+// ------------------------------------------
+
+void mousePressed() {
+
+  // START → MENU
+  if (screen == 's' && btnStart.clicked()) {
+    screen = 'm';
+  }
+
+  // MENU SCREEN BUTTONS
+  if (screen == 'm') {
+    if (btnMenu.clicked()) {
+      screen = 'm';  
+    }
+    if (btnPlay.clicked()) {
+      screen = 'p'; 
+    }
+  }
+
+  
+  if (screen == 'p' && btnPause.clicked()) {
+    screen = 'u';
+  }
+
+ 
+  if (screen == 'u' && btnResume.clicked()) {
+    screen = 'p';
+  }
+}
+
+// -------------------------------------------
+// SCREEN DRAW METHODS (Starter Example)
+// -------------------------------------------
+void drawStart() {
+  background(100, 160, 200);
+  textAlign(CENTER);
+  textSize(32);
+  text("START SCREEN", width/2, 60);
+
+  btnStart.display();
+}
+
+void drawMenu() {
+  background(120, 200, 140);
+  textAlign(CENTER);
+  textSize(32);
+  text("MENU", width/2, 60);
+
+  btnMenu.display();
+  btnPlay.display(); 
+}
+
+void drawSettings() {
+  background(200, 150, 120);
+  textSize(32);
+  text("SETTINGS", width/2, 50);
+  btnSettings.display();
+}
+
+// -------------------------------------------
+// EMPTY SCREEN METHODS FOR STUDENT PROJECT
+// -------------------------------------------
+
+
+void drawPlay() {
+  background(255);
+  textAlign(CENTER);
+  textSize(32);
+  text("PLAY SCREEN", width/2, 200);
+
+  btnPause.display();
+}
+
+void drawPause() {
+  drawPlay();
+
+  fill(0, 0, 0, 160);
+  noStroke();
+  rect(0, 0, width, height);
+
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(48);
+  text("PAUSED", width/2, height/2 - 70);
+
+  btnResume.display();
+}
+void drawGameOver() {
+  background(255);
+  text("GAME OVER SCREEN (fill this in)", 200, 200);
+}
+
+void drawStats() {
+  background(255);
+  text("STATS SCREEN (fill this in)", 200, 200);
+}
 
