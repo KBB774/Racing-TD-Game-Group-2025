@@ -51,7 +51,7 @@ void mousePressed() {
   if (screen == 's' && btnStart.clicked()) {
     screen = 'm';
   }
-
+//Henry Griffin
   // MENU SCREEN BUTTONS
   if (screen == 'm') {
     if (btnMenu.clicked()) {
@@ -84,7 +84,7 @@ void drawStart() {
 
   btnStart.display();
 }
-
+//Henry Griffin
 void drawMenu() {
   background(120, 200, 140);
   textAlign(CENTER);
@@ -115,7 +115,7 @@ void drawPlay() {
 
   btnPause.display();
 }
-
+//Henry Griffin
 void drawPause() {
   drawPlay();
 
