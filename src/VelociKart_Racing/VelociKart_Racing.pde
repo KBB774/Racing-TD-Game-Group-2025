@@ -6,7 +6,10 @@ int speed, worldWidth, worldHeight;
 PImage blue, racetrack_1, nitro, start;
 PImage currentCar;
 
-boolean play;
+// NEW
+PImage settingsPlaceholder;
+boolean play = false;
+boolean settingsMode = false;
 
 import gifAnimation.*;
 Gif title;
@@ -16,14 +19,14 @@ Enemy e1;
 float angle = 0;
 float turnSpeed = 4;
 
-// Key states (lets W + A work at the same time)
+// Key states
 boolean wDown = false;
 boolean sDown = false;
 boolean aDown = false;
 boolean dDown = false;
 
 void setup() {
-  size(1920, 1080, P2D);   // P2D = NO rotation lag
+  size(1920, 1080, P2D);
   background(85, 197, 115);
  
   speed = 10;
@@ -35,50 +38,57 @@ void setup() {
   e1 = new Enemy();
 
   // Images
-  blue = loadImage("bluecar_right.png");     // MUST FACE UP
+  blue = loadImage("bluecar_right.png");
   racetrack_1 = loadImage("racetrackfinal (1).png");
   nitro = loadImage("Nitro.png");
   start = loadImage("StartScreen.png");
+
+  // NEW placeholder settings image
+  settingsPlaceholder = loadImage("settings_placeholder.png");
 
   currentCar = blue;
 }
 
 void draw() {
-  if (!play) {
+  if (!play && !settingsMode) {
     startScreen();
+  } else if (settingsMode) {
+    settingsScreen();
   } else {
-    background(85, 197, 115);
-
-    // CAMERA CENTER
-    translate(width/2 - playerX, height/2 - playerY);
-
-    imageMode(CENTER);
-    e1.display();
-
-    // -------- TURN ANYTIME --------
-    if (aDown) angle -= turnSpeed;
-    if (dDown) angle += turnSpeed;
-
-    float rad = radians(angle);
-
-    // -------- MOVE --------
-    if (wDown) {
-      playerX += cos(rad) * speed;
-      playerY += sin(rad) * speed;
-    }
-    if (sDown) {
-      playerX -= cos(rad) * speed;
-      playerY -= sin(rad) * speed;
-    }
-
-    // -------- DRAW WORLD + CAR --------
-    drawWorld();
-    drawCar();
-
-    // WORLD LIMITS
-    playerX = constrain(playerX, 0, worldWidth);
-    playerY = constrain(playerY, 0, worldHeight);
+    gameScreen();
   }
+}
+
+// -----------------------------------------------
+// GAME SCREEN
+// -----------------------------------------------
+void gameScreen() {
+  background(85, 197, 115);
+
+  translate(width/2 - playerX, height/2 - playerY);
+
+  imageMode(CENTER);
+  e1.display();
+
+  if (aDown) angle -= turnSpeed;
+  if (dDown) angle += turnSpeed;
+
+  float rad = radians(angle);
+
+  if (wDown) {
+    playerX += cos(rad) * speed;
+    playerY += sin(rad) * speed;
+  }
+  if (sDown) {
+    playerX -= cos(rad) * speed;
+    playerY -= sin(rad) * speed;
+  }
+
+  drawWorld();
+  drawCar();
+
+  playerX = constrain(playerX, 0, worldWidth);
+  playerY = constrain(playerY, 0, worldHeight);
 }
 
 void drawCar() {
@@ -105,17 +115,69 @@ void drawWorld() {
   }
 }
 
+// -----------------------------------------------
+// START SCREEN + SETTINGS BUTTON
+// -----------------------------------------------
 void startScreen() {
   imageMode(CENTER);
   background(start);
+
+  rectMode(CENTER);
+  textAlign(CENTER);
+  textSize(50);
+
+  // PLAY BUTTON
+  fill(0, 150);
+  rect(width/2, height/2 + 150, 300, 100);
   fill(255);
+  text("PLAY", width/2, height/2 + 165);
+
+  // SETTINGS BUTTON
+  fill(0, 150);
+  rect(width/2, height/2 + 300, 300, 100);
+  fill(255);
+  text("SETTINGS", width/2, height/2 + 315);
+
   if (mousePressed) {
-    play = true;
+    // PLAY BUTTON
+    if (mouseY > height/2 + 100 && mouseY < height/2 + 200) {
+      play = true;
+    }
+    // SETTINGS BUTTON
+    if (mouseY > height/2 + 250 && mouseY < height/2 + 350) {
+      settingsMode = true;
+    }
   }
 }
 
-// ------------------- KEY INPUT HANDLERS -------------------
+// -----------------------------------------------
+// SETTINGS SCREEN
+// -----------------------------------------------
+void settingsScreen() {
+  background(50);
 
+  imageMode(CENTER);
+  image(settingsPlaceholder, width/2, height/2);
+
+  // BACK BUTTON
+  rectMode(CENTER);
+  fill(0, 150);
+  rect(150, 80, 200, 80);
+  fill(255);
+  textSize(40);
+  textAlign(CENTER);
+  text("BACK", 150, 95);
+
+  if (mousePressed) {
+    if (mouseX < 250 && mouseY < 140) {
+      settingsMode = false;
+    }
+  }
+}
+
+// -----------------------------------------------
+// KEY INPUT
+// -----------------------------------------------
 void keyPressed() {
   if (key == 'w' || keyCode == UP)    wDown = true;
   if (key == 's' || keyCode == DOWN)  sDown = true;
