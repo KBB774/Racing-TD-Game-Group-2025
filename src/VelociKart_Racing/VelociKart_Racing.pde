@@ -27,7 +27,7 @@ void setup() {
   blue_down = loadImage("bluecar_down.png");
   racetrack_1 = loadImage("racetrackfinal (1).png");
   nitro = loadImage("Nitro.png");
-  start = loadImage("StartScreen (1).png");
+  start = loadImage("StartScreen.png");
 //title = new Gif(this, "Laps 2.gif");
 //title.loop();
 
