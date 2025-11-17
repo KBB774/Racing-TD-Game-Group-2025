@@ -11,6 +11,7 @@ boolean play;
 import gifAnimation.*;
 Gif title;
 Enemy e1;
+PowerUp n1;
 
 // ROTATION + SMOOTH TURN SUPPORT
 float angle = 0;
@@ -33,6 +34,7 @@ void setup() {
   worldHeight = 2000;
 
   e1 = new Enemy();
+n1 = new PowerUp();
 
   // Images
   blue = loadImage("bluecar_right.png");     // MUST FACE UP
@@ -54,6 +56,7 @@ void draw() {
 
     imageMode(CENTER);
     e1.display();
+n1.display()
 
     // -------- TURN ANYTIME --------
     if (aDown) angle -= turnSpeed;
