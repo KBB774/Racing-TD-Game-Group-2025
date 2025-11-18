@@ -27,7 +27,7 @@ boolean dDown = false;
 
 void setup() {
   size(1536, 1024);   // P2D = NO rotation lag
-  background(85, 197, 115);
+  background(75, 189, 104);
   font = createFont("RasterForgeRegular-JpBgm.ttf", 30);
   textFont(font);
 
@@ -162,7 +162,7 @@ void drawStart() {
 }
 
 void drawPlay() {
-  background(85, 197, 115);
+  background(75, 189, 104);
   //text("PLAY SCREEN (fill this in)", 200, 200);
 }
 void gameOver() {
