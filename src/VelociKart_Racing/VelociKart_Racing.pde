@@ -140,9 +140,9 @@ void drawWorld() {
 
   // 🔹 Draw waypoints (for debugging)
   noStroke();
-  fill(255, 0, 0);
+  
   for (PVector wp : waypoints) {
-    ellipse(wp.x, wp.y, 12, 12);
+
   }
 }
 
