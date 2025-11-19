@@ -8,7 +8,6 @@ class Enemy {
 
   Enemy() {
     enemy = loadImage("PixelCarRED.png");
-    enemy.resize(103, 169);
     pos = new PVector(300, 900);  // starting point
     vel = new PVector(1, 0);      // initial direction
   }
@@ -39,6 +38,7 @@ class Enemy {
     pushMatrix();
     translate(pos.x, pos.y);
     rotate(vel.heading() + HALF_PI);
+    enemy.resize(103,169);
     imageMode(CENTER);
     image(enemy, 0, 0);
     popMatrix();
