@@ -50,7 +50,7 @@ void setup() {
   btnMenu    = new Button("MENU", 220, 300, 160, 50);
   btnRestart = new Button("Restart", 220, 150, 160, 50);
 
-  speed = 10;
+  speed = 15;
   playerX = 500;
   playerY = 500;
   worldWidth = 2250;
