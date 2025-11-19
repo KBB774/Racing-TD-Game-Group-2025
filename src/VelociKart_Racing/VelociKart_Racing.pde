@@ -26,7 +26,7 @@ boolean aDown = false;
 boolean dDown = false;
 
 void setup() {
-  size(1536, 1024);   // P2D = NO rotation lag
+  size(1920, 1080, P2D);   // P2D = NO rotation lag
   background(75, 189, 104);
   font = createFont("RasterForgeRegular-JpBgm.ttf", 30);
   textFont(font);
@@ -47,7 +47,7 @@ void setup() {
   blue = loadImage("bluecar_right.png");     // MUST FACE UP
   racetrack_1 = loadImage("racetrackfinal (1).png");
   nitro = loadImage("Nitro.png");
-  start = loadImage("StartScreen (1).png");
+  start = loadImage("StartScreen.png");
 
   currentCar = blue;
 }
