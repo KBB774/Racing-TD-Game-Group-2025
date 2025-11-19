@@ -35,7 +35,7 @@ void setup() {
   btnMenu    = new Button("MENU", 220, 300, 160, 50);
   btnRestart = new Button("Restart", 220, 150, 160, 50);
 
-  speed = 15;
+  speed = 20;
   playerX = 500;
   playerY = 500;
   worldWidth = 2250;
@@ -46,6 +46,7 @@ void setup() {
   // Images
   blue = loadImage("bluecar_right.png");     // MUST FACE UP
   racetrack_1 = loadImage("racetrackfinal (1).png");
+  racetrack_1.loadPixels();
   nitro = loadImage("Nitro.png");
   start = loadImage("StartScreen.png");
 
@@ -81,9 +82,13 @@ void draw() {
     float rad = radians(angle);
 
     // -------- MOVE --------
+    color c = racetrack_1.pixels[playerY * 2250 + playerX]; // change it so that this iis a class variable 
+    boolean isGray = (red(c) == green(c) && green(c) == blue(c));
+
+    float nspeed = 1 - .5 * int(!isGray);
     if (wDown) {
-      playerX += cos(rad) * speed;
-      playerY += sin(rad) * speed;
+      playerX += cos(rad) * speed * nspeed;
+      playerY += sin(rad) * speed * nspeed;
     }
     if (sDown) {
       playerX -= cos(rad) * speed;
@@ -125,9 +130,9 @@ void drawWorld() {
 
   // 🔹 Draw waypoints (for debugging)
   noStroke();
-  
+ 
   for (PVector wp : waypoints) {
-
+    
   }
 }
 
