@@ -16,11 +16,11 @@ Gif title;
 Enemy e1;
 PVector[] waypoints = {
   new PVector(160, 990),
-  new PVector (500,1400),
-  new PVector (780,1720),
-  new PVector (1210,1550),
+  new PVector (500, 1400),
+  new PVector (780, 1720),
+  new PVector (1210, 1550),
   new PVector(1460, 1440),
-  new PVector (1850,1420),
+  new PVector (1850, 1420),
   new PVector(1990, 1100),
   new PVector(1900, 670),
   new PVector(1290, 720),
@@ -55,7 +55,7 @@ void setup() {
   playerY = 500;
   worldWidth = 2250;
   worldHeight = 2000;
-e1 = new Enemy();
+  e1 = new Enemy();
   e1 = new Enemy();
   //n1 = new PowerUp();
   // Images
@@ -87,6 +87,7 @@ void draw() {
 
     imageMode(CENTER);
     e1.display();
+    e1.update();
     //n1 = new PowerUp();
     // -------- TURN ANYTIME --------
     if (aDown) angle -= turnSpeed;
@@ -111,10 +112,12 @@ void draw() {
     // WORLD LIMITS
     playerX = constrain(playerX, 0, worldWidth);
     playerY = constrain(playerY, 0, worldHeight);
-e1.display();
-e1.update
+    e1.display();
+    e1.update();
   }
 }
+
+
 
 void drawCar() {
   pushMatrix();
@@ -127,14 +130,21 @@ void drawCar() {
 
 void drawWorld() {
   imageMode(CORNER);
-  image(racetrack_1, 0, 0);
-  textSize(100);
-  fill(255);
-  text("score: ", height-30, width-30);
+  image(racetrack_1,0,0);
+  for (int x = 0; x < worldWidth; x += 100) {
+    line(x, 0, x, worldHeight);
+  }
+  for (int y = 0; y < worldHeight; y += 100) {
+    line(0, y, worldWidth, y);
+  }
 
-  // Grid removed
+  // 🔹 Draw waypoints (for debugging)
+  noStroke();
+  fill(255, 0, 0);
+  for (PVector wp : waypoints) {
+    ellipse(wp.x, wp.y, 12, 12);
+  }
 }
-
 
 //void startScreen() {
 //  imageMode(CENTER);
@@ -184,11 +194,4 @@ void drawPlay() {
 }
 void gameOver() {
   // btnRestart.display()
-}
- // 🔹 Draw waypoints (for debugging)
-  noStroke();
-  fill(255, 0, 0);
-  for (PVector wp : waypoints) {
-    ellipse(wp.x, wp.y, 12, 12);
-  }
 }
