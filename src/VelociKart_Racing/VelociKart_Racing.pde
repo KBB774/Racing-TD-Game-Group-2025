@@ -14,7 +14,22 @@ boolean play;
 import gifAnimation.*;
 Gif title;
 Enemy e1;
-
+PVector[] waypoints = {
+  new PVector(160, 990),
+  new PVector (500,1400),
+  new PVector (780,1720),
+  new PVector (1210,1550),
+  new PVector(1460, 1440),
+  new PVector (1850,1420),
+  new PVector(1990, 1100),
+  new PVector(1900, 670),
+  new PVector(1290, 720),
+  new PVector(1060, 410),
+  new PVector(640, 270),
+  new PVector(350, 300),
+  new PVector(200, 610),
+  new PVector(220, 850)
+};
 // ROTATION + SMOOTH TURN SUPPORT
 float angle = 0;
 float turnSpeed = 4;
@@ -40,7 +55,7 @@ void setup() {
   playerY = 500;
   worldWidth = 2250;
   worldHeight = 2000;
-
+e1 = new Enemy();
   e1 = new Enemy();
   //n1 = new PowerUp();
   // Images
@@ -96,6 +111,8 @@ void draw() {
     // WORLD LIMITS
     playerX = constrain(playerX, 0, worldWidth);
     playerY = constrain(playerY, 0, worldHeight);
+e1.display();
+e1.update
   }
 }
 
@@ -167,4 +184,11 @@ void drawPlay() {
 }
 void gameOver() {
   // btnRestart.display()
+}
+ // 🔹 Draw waypoints (for debugging)
+  noStroke();
+  fill(255, 0, 0);
+  for (PVector wp : waypoints) {
+    ellipse(wp.x, wp.y, 12, 12);
+  }
 }
