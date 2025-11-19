@@ -2,6 +2,7 @@
 
 int playerX, playerY;
 int speed, worldWidth, worldHeight;
+SoundFile hornSound;
 char screen = 's';   // s = start, m = menu, t = settings, p = play, u = pause, g = game over, a = app stats
 Button btnStart, btnMenu, btnSettings, btnBack, btnRestart;
 PFont font;
@@ -10,6 +11,8 @@ PImage blue, racetrack_1, nitro, start;
 PImage currentCar;
 
 boolean play;
+
+import processing.sound.*;
 
 import gifAnimation.*;
 Gif title;
@@ -49,6 +52,8 @@ void setup() {
   racetrack_1.loadPixels();
   nitro = loadImage("Nitro.png");
   start = loadImage("StartScreen.png");
+    hornSound = new SoundFile(this, "car-honk.mp3");
+
 
   currentCar = blue;
 }
@@ -152,6 +157,7 @@ void keyPressed() {
   if (key == 's' || keyCode == DOWN)  sDown = true;
   if (key == 'a' || keyCode == LEFT)  aDown = true;
   if (key == 'd' || keyCode == RIGHT) dDown = true;
+  if (key == 'h') hornSound.play();
 }
 
 void keyReleased() {
