@@ -21,7 +21,7 @@ boolean timerRunning = false; // Is the timer running?
 import processing.sound.*;
 
 Enemy e1;
-
+PowerUp n1;
 // ROTATION + SMOOTH TURN SUPPORT
 float angle = 0;
 float turnSpeed = 4;
@@ -49,7 +49,7 @@ void setup() {
   worldHeight = 2000;
   e1 = new Enemy();
   e1 = new Enemy();
-  //n1 = new PowerUp();
+  n1 = new PowerUp();
   // Images
   blue = loadImage("bluecar_right.png");     // MUST FACE UP
   racetrack_1 = loadImage("racetrackfinal (1).png");
@@ -94,7 +94,7 @@ if (timerRunning) {
     imageMode(CENTER);
     e1.display();
     e1.update();
-    //n1 = new PowerUp();
+    n1.display();
     // -------- TURN ANYTIME --------
     if (aDown) angle -= turnSpeed;
     if (dDown) angle += turnSpeed;
@@ -125,6 +125,7 @@ if (timerRunning) {
     playerY = constrain(playerY, 0, worldHeight);
     e1.display();
     e1.update();
+n1.display
   }
 }
 
