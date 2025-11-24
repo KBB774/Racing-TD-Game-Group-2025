@@ -25,6 +25,6 @@ class Button {
 
   boolean clicked() {
     return (mouseX > x && mouseX < x+w &&
-      mouseY > y && mouseY < y+h);
+            mouseY > y && mouseY < y+h);
   }
 }
