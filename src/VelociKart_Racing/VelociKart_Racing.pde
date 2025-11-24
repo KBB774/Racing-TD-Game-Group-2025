@@ -141,7 +141,6 @@ n1.display
   imageMode(CENTER);
   e1.display();
   e1.update();
-  n1.display();
   nitroPU.update();
   nitroPU.display();
   // -------- TURN ANYTIME --------
