@@ -134,6 +134,7 @@ nitroPU.display();
 n1.display
   }
 }
+//Henry Griffin
 void drawPausedScreen() {
   fill(255);
   textAlign(CENTER);
