@@ -1,143 +1,224 @@
-// Kellen Brim, Mark Connell, Zac Hawkins, Henry Griffin
+//Kellen Brim, Mark Connell, Zac Hawkins, Henry Griffin
 
-import processing.sound.*;
-
-Player player;
-Enemy e1;
-
-int worldWidth = 2250;
-int worldHeight = 2000;
-Lap_Counter lapZone;
-
+int playerX, playerY;
+int speed, worldWidth, worldHeight;
+SoundFile hornSound, engineSound;
+char screen = 's';   // s = start, m = menu, t = settings, p = play, u = pause, g = game over, a = app stats
+Button btnStart, btnMenu, btnControls, btnBack, btnRestart;
+PFont font;
+PowerUp nitroPU;
 PImage blue, racetrack_1, nitro, start;
 PImage currentCar;
 
-boolean play = false;
+boolean play;
+boolean engineStarted = false;
+boolean gamePaused = false;
+int startTime;       // Stores the millis() when the race starts
+int elapsedTime = 0; // Elapsed time in milliseconds
+boolean timerRunning = false; // Is the timer running?
 
-char screen = 's'; // s = start, p = play
 
-Button btnStart;
-PFont font;
+import processing.sound.*;
+
+Enemy e1;
+PowerUp n1;
+// ROTATION + SMOOTH TURN SUPPORT
+float angle = 0;
+float turnSpeed = 4;
+
+// Key states (lets W + A work at the same time)
+boolean wDown = false;
+boolean sDown = false;
+boolean aDown = false;
+boolean dDown = false;
 
 void setup() {
-  size(1920, 1080, P2D);
+  size(1920, 1080, P2D);   // P2D = NO rotation lag
   background(75, 189, 104);
-
   font = createFont("RasterForgeRegular-JpBgm.ttf", 30);
   textFont(font);
 
-  btnStart = new Button("PLAY", 650, 830, 600, 100);
-  lapZone = new Lap_Counter(70, 890, 400, 40); // x, y, w, h
-lapZone.visible = true; // Set to false to make invisible
-
-  // Images
-  blue = loadImage("bluecar_right.png");
-  currentCar = blue;
-
-  racetrack_1 = loadImage("racetrackfinal (1).png");
-  racetrack_1.loadPixels();
-
-  nitro = loadImage("Nitro.png");
-  start = loadImage("StartScreen.png");
-
-  SoundFile hornSound = new SoundFile(this, "car-honk.mp3");
-  SoundFile engineSound = new SoundFile(this, "engine.mp3");
-
-  // Create the player
-  player = new Player(500, 500, currentCar, hornSound, engineSound);
-
-  // Enemy
-  e1 = new Enemy();
-}
-
+  btnStart    = new Button("PLAY", 650, 830, 600, 100);
+  btnMenu    = new Button("MENU", 220, 300, 160, 50);
+  btnRestart = new Button("Restart", 220, 150, 160, 50);
+nitroPU = new PowerUp();
+  nitroPU = new PowerUp();
+  speed = 20;
+  playerX = 500;
+  playerY = 500;
+@@ -66,73 +66,73 @@
 void draw() {
-  if (!play || screen == 's') {
+  if (!play) {
     drawStart();
+return;
+  } 
+if (gamePaused) {
     return;
   }
+  if (gamePaused) {
+    drawPausedScreen();
+    return;
+  }
+ background(85, 197, 115);
+    switch(screen) {
+    case 's' :
+      drawStart();
+      break;
+    case 'p' :
 
-  if (screen == 'p') {
-    background(85, 197, 115);
-
-    player.startEngine();  // Start engine once
-
-if (lapZone.intersects(player)) {
-    println("Player touched lap area!");
+      if (screen == 'p' && !engineStarted) {
+        engineSound.loop();   // safe to start now
+        engineSound.amp(0.4);
+        engineStarted = true;
+      }
+if (timerRunning) {
+  elapsedTime = millis() - startTime;
 }
 
-
+      drawPlay();
+      break;
+    }
+  background(85, 197, 115);
+  switch(screen) {
+  case 's' :
+    drawStart();
+    break;
+  case 'p' :
 
     // CAMERA CENTER
-    translate(width/2 - player.x, height/2 - player.y);
-    
-    lapZone.update(player);
+    translate(width/2 - playerX, height/2 - playerY);
 
-
-    // Update + display enemy
-    e1.update();
+    imageMode(CENTER);
     e1.display();
+    e1.update();
+    n1.display();
+nitroPU.update();
+nitroPU.display();
+    // -------- TURN ANYTIME --------
+    if (aDown) angle -= turnSpeed;
+    if (dDown) angle += turnSpeed;
 
-    // Player update & display
-    player.update();
-   
+    float rad = radians(angle);
 
+    // -------- MOVE --------
+    color c = racetrack_1.pixels[playerY * 2250 + playerX]; // change it so that this iis a class variable
+    boolean isGray = (red(c) == green(c) && green(c) == blue(c));
+
+    float nspeed = 1 - .5 * int(!isGray);
+    if (wDown) {
+      playerX += cos(rad) * speed * nspeed;
+      playerY += sin(rad) * speed * nspeed;
+    if (screen == 'p' && !engineStarted) {
+      engineSound.loop();   // safe to start now
+      engineSound.amp(0.4);
+      engineStarted = true;
+    }
+    if (sDown) {
+      playerX -= cos(rad) * speed;
+      playerY -= sin(rad) * speed;
+    if (timerRunning) {
+      elapsedTime = millis() - startTime;
+    }
+
+    // -------- DRAW WORLD + CAR --------
     drawWorld();
-    lapZone.display();
-    player.display();
-    player.drawTimer();
-  }
-  fill(255);
-textSize(60);
-text("Laps: " + lapZone.laps, player.x - 300, player.y - 400);
+    drawCar();
+    drawTimer();
 
-}
-
-// ------------------- WORLD DRAWING -------------------
-
-void drawWorld() {
-  imageMode(CORNER);
-  image(racetrack_1, 0, 0);
-
-  // Debug world grid (optional)
-  stroke(255, 40);
-  for (int x = 0; x < worldWidth; x += 100) {
-    line(x, 0, x, worldHeight);
-  }
-  for (int y = 0; y < worldHeight; y += 100) {
-    line(0, y, worldWidth, y);
+    // WORLD LIMITS
+    playerX = constrain(playerX, 0, worldWidth);
+    playerY = constrain(playerY, 0, worldHeight);
+    e1.display();
+    e1.update();
+n1.display
+    drawPlay();
+    break;
   }
 
-  noStroke();
+  // CAMERA CENTER
+  translate(width/2 - playerX, height/2 - playerY);
+
+  imageMode(CENTER);
+  e1.display();
+  e1.update();
+  n1.display();
+  nitroPU.update();
+  nitroPU.display();
+  // -------- TURN ANYTIME --------
+  if (aDown) angle -= turnSpeed;
+  if (dDown) angle += turnSpeed;
+
+  float rad = radians(angle);
+
+  // -------- MOVE --------
+  color c = racetrack_1.pixels[playerY * 2250 + playerX]; // change it so that this iis a class variable
+  boolean isGray = (red(c) == green(c) && green(c) == blue(c));
+
+  float nspeed = 1 - .5 * int(!isGray);
+  if (wDown) {
+    playerX += cos(rad) * speed * nspeed;
+    playerY += sin(rad) * speed * nspeed;
+  }
+  if (sDown) {
+    playerX -= cos(rad) * speed;
+    playerY -= sin(rad) * speed;
+  }
+
+  // -------- DRAW WORLD + CAR --------
+  drawWorld();
+  drawCar();
+  drawTimer();
+
+  // WORLD LIMITS
+  playerX = constrain(playerX, 0, worldWidth);
+  playerY = constrain(playerY, 0, worldHeight);
+  e1.display();
+  e1.update();
+  nitroPU.update();
+  nitroPU.display();
 }
-
-// ------------------- START SCREEN -------------------
-
-void drawStart() {
-  background(start);
-  btnStart.display();
+//Henry Griffin
+void drawPausedScreen() {
+@@ -189,8 +189,8 @@
+  if (key == 'a' || keyCode == LEFT)  aDown = true;
+  if (key == 'd' || keyCode == RIGHT) dDown = true;
+  if (key == 'h') hornSound.play();
+  if(key == 'm') engineSound.stop();
+ if (key == 'p' || key == 'P') {
+  if (key == 'm') engineSound.stop();
+  if (key == 'p' || key == 'P') {
+    gamePaused = !gamePaused;
+  }
 }
-
-void mousePressed() {
-  if (screen == 's') {
+@@ -206,12 +206,11 @@
+  switch(screen) {
+  case 's' :
     if (btnStart.clicked()) {
+  play = true;
+  screen = 'p';
+  startTime = millis();  // Start the stopwatch
+  timerRunning = true;
+}
+
       play = true;
       screen = 'p';
-      player.timerRunning = true;
-      player.startTime = millis();
+      startTime = millis();  // Start the stopwatch
+      timerRunning = true;
     }
   }
 }
+//Kellen Brim Screen
+@@ -231,11 +230,11 @@
+  fill(255);        // White text
+  textSize(50);
+  textAlign(RIGHT, TOP);
+  
 
-// ------------------- INPUT -------------------
+  int seconds = (elapsedTime / 1000) % 60;
+  int minutes = (elapsedTime / 1000) / 60;
+  int milliseconds = (elapsedTime % 1000) / 10;
+  
 
-void keyPressed() {
-  player.keyDown(key, keyCode);
-
-  if (key == 'm') {
-    player.engineSound.stop();
-  }
-}
-
-void keyReleased() {
-  player.keyUp(key, keyCode);
+  String timeString = nf(minutes, 2) + ":" + nf(seconds, 2) + ":" + nf(milliseconds, 2);
+  text(timeString, width/2 + 850, height/2 - 500); // Adjust position on screen
 }
