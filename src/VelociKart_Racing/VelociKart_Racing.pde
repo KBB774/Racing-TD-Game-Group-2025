@@ -2,20 +2,24 @@
 
 int playerX, playerY;
 int speed, worldWidth, worldHeight;
-SoundFile hornSound;
+SoundFile hornSound, engineSound;
 char screen = 's';   // s = start, m = menu, t = settings, p = play, u = pause, g = game over, a = app stats
-Button btnStart, btnMenu, btnSettings, btnBack, btnRestart;
+Button btnStart, btnMenu, btnControls, btnBack, btnRestart;
 PFont font;
 
 PImage blue, racetrack_1, nitro, start;
 PImage currentCar;
 
 boolean play;
+boolean engineStarted = false;
+
+int startTime;       // Stores the millis() when the race starts
+int elapsedTime = 0; // Elapsed time in milliseconds
+boolean timerRunning = false; // Is the timer running?
+
 
 import processing.sound.*;
 
-import gifAnimation.*;
-Gif title;
 Enemy e1;
 
 // ROTATION + SMOOTH TURN SUPPORT
@@ -34,7 +38,7 @@ void setup() {
   font = createFont("RasterForgeRegular-JpBgm.ttf", 30);
   textFont(font);
 
-  btnStart    = new Button("PLAY", 460, 830, 600, 100);
+  btnStart    = new Button("PLAY", 650, 830, 600, 100);
   btnMenu    = new Button("MENU", 220, 300, 160, 50);
   btnRestart = new Button("Restart", 220, 150, 160, 50);
 
@@ -52,7 +56,8 @@ void setup() {
   racetrack_1.loadPixels();
   nitro = loadImage("Nitro.png");
   start = loadImage("StartScreen.png");
-    hornSound = new SoundFile(this, "car-honk.mp3");
+  hornSound = new SoundFile(this, "car-honk.mp3");
+  engineSound = new SoundFile(this, "engine.mp3");
 
 
   currentCar = blue;
@@ -69,6 +74,16 @@ void draw() {
       drawStart();
       break;
     case 'p' :
+
+      if (screen == 'p' && !engineStarted) {
+        engineSound.loop();   // safe to start now
+        engineSound.amp(0.4);
+        engineStarted = true;
+      }
+if (timerRunning) {
+  elapsedTime = millis() - startTime;
+}
+
       drawPlay();
       break;
     }
@@ -87,7 +102,7 @@ void draw() {
     float rad = radians(angle);
 
     // -------- MOVE --------
-    color c = racetrack_1.pixels[playerY * 2250 + playerX]; // change it so that this iis a class variable 
+    color c = racetrack_1.pixels[playerY * 2250 + playerX]; // change it so that this iis a class variable
     boolean isGray = (red(c) == green(c) && green(c) == blue(c));
 
     float nspeed = 1 - .5 * int(!isGray);
@@ -103,6 +118,7 @@ void draw() {
     // -------- DRAW WORLD + CAR --------
     drawWorld();
     drawCar();
+    drawTimer();
 
     // WORLD LIMITS
     playerX = constrain(playerX, 0, worldWidth);
@@ -125,7 +141,7 @@ void drawCar() {
 
 void drawWorld() {
   imageMode(CORNER);
-  image(racetrack_1,0,0);
+  image(racetrack_1, 0, 0);
   for (int x = 0; x < worldWidth; x += 100) {
     line(x, 0, x, worldHeight);
   }
@@ -135,9 +151,8 @@ void drawWorld() {
 
   // 🔹 Draw waypoints (for debugging)
   noStroke();
- 
+
   for (PVector wp : waypoints) {
-    
   }
 }
 
@@ -158,6 +173,7 @@ void keyPressed() {
   if (key == 'a' || keyCode == LEFT)  aDown = true;
   if (key == 'd' || keyCode == RIGHT) dDown = true;
   if (key == 'h') hornSound.play();
+  if(key == 'm') engineSound.stop();
 }
 
 void keyReleased() {
@@ -171,12 +187,15 @@ void mousePressed() {
   switch(screen) {
   case 's' :
     if (btnStart.clicked()) {
-      play = true;
-      screen = 'p';
-    }
+  play = true;
+  screen = 'p';
+  startTime = millis();  // Start the stopwatch
+  timerRunning = true;
+}
+
   }
 }
-// Kellen Brim
+//Kellen Brim Screen
 void drawStart() {
   background(start);
   textAlign(CENTER);
@@ -186,8 +205,22 @@ void drawStart() {
 
 void drawPlay() {
   background(75, 189, 104);
-  //text("PLAY SCREEN (fill this in)", 200, 200);
 }
+
+
+void drawTimer() {
+  fill(255);        // White text
+  textSize(50);
+  textAlign(RIGHT, TOP);
+  
+  int seconds = (elapsedTime / 1000) % 60;
+  int minutes = (elapsedTime / 1000) / 60;
+  int milliseconds = (elapsedTime % 1000) / 10;
+  
+  String timeString = nf(minutes, 2) + ":" + nf(seconds, 2) + ":" + nf(milliseconds, 2);
+  text(timeString, width/2 + 850, height/2 - 500); // Adjust position on screen
+}
+
 void gameOver() {
   // btnRestart.display()
 }
