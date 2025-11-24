@@ -6,13 +6,13 @@ SoundFile hornSound, engineSound;
 char screen = 's';   // s = start, m = menu, t = settings, p = play, u = pause, g = game over, a = app stats
 Button btnStart, btnMenu, btnControls, btnBack, btnRestart;
 PFont font;
-
+PowerUp nitroPU;
 PImage blue, racetrack_1, nitro, start;
 PImage currentCar;
 
 boolean play;
 boolean engineStarted = false;
-
+boolean gamePaused = false;
 int startTime;       // Stores the millis() when the race starts
 int elapsedTime = 0; // Elapsed time in milliseconds
 boolean timerRunning = false; // Is the timer running?
@@ -41,7 +41,7 @@ void setup() {
   btnStart    = new Button("PLAY", 650, 830, 600, 100);
   btnMenu    = new Button("MENU", 220, 300, 160, 50);
   btnRestart = new Button("Restart", 220, 150, 160, 50);
-
+nitroPU = new PowerUp();
   speed = 20;
   playerX = 500;
   playerY = 500;
@@ -66,9 +66,13 @@ void setup() {
 void draw() {
   if (!play) {
     drawStart();
-  } else {
-    background(85, 197, 115);
-
+return;
+  } 
+if (gamePaused) {
+    drawPausedScreen();
+    return;
+  }
+ background(85, 197, 115);
     switch(screen) {
     case 's' :
       drawStart();
@@ -95,6 +99,8 @@ if (timerRunning) {
     e1.display();
     e1.update();
     n1.display();
+nitroPU.update();
+nitroPU.display();
     // -------- TURN ANYTIME --------
     if (aDown) angle -= turnSpeed;
     if (dDown) angle += turnSpeed;
@@ -128,7 +134,15 @@ if (timerRunning) {
 n1.display
   }
 }
+void drawPausedScreen() {
+  fill(255);
+  textAlign(CENTER);
+  textSize(150);
+  text("PAUSED", width/2, height/2);
 
+  textSize(50);
+  text("Press P to Resume", width/2, height/2 + 120);
+}
 
 
 void drawCar() {
@@ -175,6 +189,9 @@ void keyPressed() {
   if (key == 'd' || keyCode == RIGHT) dDown = true;
   if (key == 'h') hornSound.play();
   if(key == 'm') engineSound.stop();
+ if (key == 'p' || key == 'P') {
+    gamePaused = !gamePaused;
+  }
 }
 
 void keyReleased() {
