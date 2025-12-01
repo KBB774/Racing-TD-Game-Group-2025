@@ -2,10 +2,8 @@ class Lap_Counter {
   float x, y, w, h;      
   boolean visible = false;
 
-  int laps = 0;        // total laps counted
-  boolean active = true; // prevents multiple counts
-  int cooldown = 3000;   // ms before it can count again
-  int lastTriggerTime = -1000;
+  int laps = 0;              // total laps counted
+  boolean playerInZone = false; // track if player is currently inside the lap zone
 
   Lap_Counter(float x, float y, float w, float h) {
     this.x = x;
@@ -25,26 +23,27 @@ class Lap_Counter {
   }
 
   // Call every frame from draw()
-  void update(Player p) {
-    // Has enough time passed to re-activate?
-    if (millis() - lastTriggerTime > cooldown) {
-      active = true;
-    }
+ void update(float px, float py) {
+  boolean currentlyInZone = intersects(px, py);
 
-    // If player touches the rectangle AND it's active
-    if (active && intersects(p)) {
-      laps++;
-      println("Lap: " + laps);
-      active = false;                   // disable until cooldown
-      lastTriggerTime = millis();       // start cooldown timer
-    }
+  if (currentlyInZone && !playerInZone) {
+    laps++;
+    println("Lap completed! Total laps: " + laps);
   }
+
+  playerInZone = currentlyInZone;
+}
+
+boolean intersects(float px, float py) {
+  return (px > x && px < x + w && py > y && py < y + h);
+}
+
 
   // Debug draw
   void display() {
     if (visible) {
       noFill();
-      stroke(255);
+      stroke(255, 0, 0);
       strokeWeight(3);
       rect(x, y, w, h);
     }
