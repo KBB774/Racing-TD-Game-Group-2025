@@ -4,13 +4,15 @@ int playerX, playerY;
 int speed, worldWidth, worldHeight;
 SoundFile hornSound;
 char screen = 's';   // s = start, m = menu, t = settings, p = play, u = pause, g = game over, a = app stats
-Button btnStart, btnMenu, btnSettings, btnBack, btnRestart,btnPause;
+Button btnStart, btnMenu, btnSettings, btnBack, btnRestart, btnPause;
 PFont font;
 PowerUp nitroPU;
 PImage blue, racetrack_1, nitro, start;
 PImage currentCar;
-
+Player player;
 boolean play;
+Lap_Counter lapZone;
+
 
 // PAUSE SUPPORT
 boolean gamePaused = false;
@@ -40,7 +42,9 @@ void setup() {
   btnStart    = new Button("PLAY", 460, 830, 600, 100);
   btnMenu    = new Button("MENU", 220, 300, 160, 50);
   btnRestart = new Button("Restart", 220, 150, 160, 50);
-nitroPU = new PowerUp();
+  lapZone = new Lap_Counter(70, 890, 400, 40); // x, y, w, h
+  lapZone.visible = true; // Set to false to make invisible
+  nitroPU = new PowerUp();
   speed = 20;
   playerX = 500;
   playerY = 500;
@@ -54,6 +58,9 @@ nitroPU = new PowerUp();
   nitro = loadImage("Nitro.png");
   start = loadImage("StartScreen.png");
   hornSound = new SoundFile(this, "car-honk.mp3");
+  player = new Player(playerX, playerY, currentCar, hornSound, null); 
+// replace 'null' with engineSound if you have it
+
 
   currentCar = blue;
 }
@@ -75,14 +82,24 @@ void draw() {
   background(85, 197, 115);
 
   switch(screen) {
-    case 's' : drawStart(); break;
-    case 'p' : drawPlay();  break;
+  case 's' :
+    drawStart();
+    break;
+  case 'p' :
+    drawPlay();
+    break;
   }
+  if (lapZone.intersects(player)) {
+    println("Player touched lap area!");
+  }
+   lapZone.update(playerX, playerY);
+
 
   // CAMERA CENTER
   translate(width/2 - playerX, height/2 - playerY);
 
   imageMode(CENTER);
+ 
 
 
   // TURNING
@@ -107,15 +124,21 @@ void draw() {
   }
 
   drawWorld();
+  lapZone.display();
   drawCar();
-    e1.display();
+  e1.display();
   e1.update();
-nitroPU.update();
-nitroPU.display();
+  //nitroPU.update();
+  //nitroPU.display();
 
   // WORLD LIMITS
   playerX = constrain(playerX, 0, worldWidth);
   playerY = constrain(playerY, 0, worldHeight);
+
+  fill(255);
+textSize(60);
+text("Laps: " + lapZone.laps, playerX - 300, playerY - 400);
+
 }
 
 void drawCar() {
@@ -129,7 +152,7 @@ void drawCar() {
 
 void drawWorld() {
   imageMode(CORNER);
-  image(racetrack_1,0,0);
+  image(racetrack_1, 0, 0);
 }
 
 // ------------------- PAUSE OVERLAY -------------------
@@ -167,18 +190,20 @@ void keyReleased() {
   if (key == 'd' || keyCode == RIGHT) dDown = false;
 }
 
-void mousePressed() {
-  if (screen == 's' && btnStart.clicked()) {
-    play = true;
-    screen = 'p';
-  }
-}
+
 
 void drawStart() {
   background(start);
-  textAlign(CENTER);
-  textSize(100);
   btnStart.display();
+}
+
+void mousePressed() {
+  if (screen == 's') {
+    if (btnStart.clicked()) {
+      play = true;
+      screen = 'p';
+    }
+  }
 }
 
 void drawPlay() {
