@@ -128,8 +128,8 @@ void draw() {
   drawCar();
   e1.display();
   e1.update();
-  //nitroPU.update();
-  //nitroPU.display();
+  nitroPU.update();
+  nitroPU.display();
 
   // WORLD LIMITS
   playerX = constrain(playerX, 0, worldWidth);
