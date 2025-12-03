@@ -1,3 +1,4 @@
+// Kellen Brim
 class Lap_Counter {
   float x, y, w, h;      
   boolean visible = false;
