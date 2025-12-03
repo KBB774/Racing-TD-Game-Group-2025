@@ -2,15 +2,17 @@
 
 int playerX, playerY;
 int speed, worldWidth, worldHeight;
-SoundFile hornSound;
+SoundFile hornSound, engineSound;
 char screen = 's';   // s = start, m = menu, t = settings, p = play, u = pause, g = game over, a = app stats
 Button btnStart, btnMenu, btnSettings, btnBack, btnRestart, btnPause;
 PFont font;
 PowerUp nitroPU;
-PImage blue, racetrack_1, nitro, start;
+PImage blue, racetrack_1, nitro, start, over;
 PImage currentCar;
 Player player;
 boolean play;
+boolean isGameOver = false;
+
 Lap_Counter lapZone;
 
 
@@ -39,7 +41,7 @@ void setup() {
   font = createFont("RasterForgeRegular-JpBgm.ttf", 30);
   textFont(font);
 
-  btnStart    = new Button("PLAY", 460, 830, 600, 100);
+  btnStart    = new Button("PLAY", 660, 830, 600, 100);
   btnMenu    = new Button("MENU", 220, 300, 160, 50);
   btnRestart = new Button("Restart", 220, 150, 160, 50);
   lapZone = new Lap_Counter(70, 890, 400, 40); // x, y, w, h
@@ -57,7 +59,9 @@ void setup() {
   racetrack_1.loadPixels();
   nitro = loadImage("Nitro.png");
   start = loadImage("StartScreen.png");
+  over = loadImage("Game_Over.png");
   hornSound = new SoundFile(this, "car-honk.mp3");
+  engineSound = new SoundFile(this, "engine.mp3");
   player = new Player(playerX, playerY, currentCar, hornSound, null); 
 // replace 'null' with engineSound if you have it
 
@@ -130,13 +134,17 @@ void draw() {
   e1.update();
   nitroPU.update();
   nitroPU.display();
+  nitro.resize(100,100);
 
   // WORLD LIMITS
   playerX = constrain(playerX, 0, worldWidth);
   playerY = constrain(playerY, 0, worldHeight);
 
+fill(255,10,10);
+strokeWeight(5);
+ellipse(playerX -300, playerY - 400, 400, 150);
   fill(255);
-textSize(60);
+textSize(65);
 text("Laps: " + lapZone.laps, playerX - 300, playerY - 400);
 
 }
@@ -153,6 +161,9 @@ void drawCar() {
 void drawWorld() {
   imageMode(CORNER);
   image(racetrack_1, 0, 0);
+  if(lapZone.laps > 2){
+    gameOver();
+  }
 }
 
 // ------------------- PAUSE OVERLAY -------------------
@@ -208,4 +219,13 @@ void mousePressed() {
 
 void drawPlay() {
   background(75, 189, 104);
+}
+
+void gameOver() {
+  fill(255);
+ textSize(36);
+  text("Time: " + lapZone.laps, width/2, height/3);
+  image(over, playerX-960, playerY-560);
+  noLoop();
+
 }
