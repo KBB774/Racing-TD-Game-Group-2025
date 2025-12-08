@@ -168,8 +168,6 @@ void drawWorld() {
 
 //PauseScreen Henry Griffin and help with ai
 void drawPausedScreen() {
-  //  NO background(0,150);  // removed so screen stays visible
-
   fill(255);
   textAlign(CENTER);
   textSize(150);
