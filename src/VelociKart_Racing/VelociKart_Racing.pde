@@ -162,7 +162,7 @@ void drawCar() {
 void drawWorld() {
   imageMode(CORNER);
   image(racetrack_1, 0, 0);
-  if(lapZone.laps > 2){
+  if(lapZone.laps > 10){
     gameOver();
   }
 }
