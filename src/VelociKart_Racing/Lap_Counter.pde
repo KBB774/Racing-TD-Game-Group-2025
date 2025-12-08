@@ -1,5 +1,5 @@
-// Kellen Brim
 class Lap_Counter {
+  //Created by Kellen Brim
   float x, y, w, h;      
   boolean visible = false;
 
@@ -44,7 +44,7 @@ boolean intersects(float px, float py) {
   void display() {
     if (visible) {
       noFill();
-      stroke(255, 0, 0);
+      stroke(255, 255, 255);
       strokeWeight(3);
       rect(x, y, w, h);
     }
