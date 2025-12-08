@@ -166,7 +166,7 @@ void drawWorld() {
   }
 }
 
-// ------------------- PAUSE OVERLAY -------------------
+//PauseScreen Henry Griffin and help with ai
 void drawPausedScreen() {
   //  NO background(0,150);  // removed so screen stays visible
 
