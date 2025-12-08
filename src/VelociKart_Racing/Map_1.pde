@@ -1,4 +1,5 @@
-
+//Henry Griffin
+//These are the waypoints that the enemy car follows
 PVector[] waypoints = {
   new PVector(160, 990),
   new PVector (500, 1400),
