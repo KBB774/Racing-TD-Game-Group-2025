@@ -77,12 +77,12 @@ void draw() {
     return;
   }
 
-  // ======== PAUSED — STOP EVERYTHING EXCEPT OVERLAY ========
+  //pauses everything
   if (gamePaused) {
     drawPausedScreen();
     return;
   }
-  // =========================================================
+
 
   background(85, 197, 115);
 
