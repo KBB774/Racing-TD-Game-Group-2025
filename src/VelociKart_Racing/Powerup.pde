@@ -1,4 +1,4 @@
-//Zac Hawkins
+//Zac Hawkins, Henry Griffin
 class PowerUp {
   float x, y;
   boolean active = true;
@@ -8,8 +8,7 @@ class PowerUp {
   int boostEndTime = 0;
   int newRespawnTime = 0;
 
-  // Define track points
-  PVector[] trackPoints = {
+  PVector[] map1TrackPoints = {
     new PVector(160, 990),
     new PVector(500, 1400),
     new PVector(780, 1720),
@@ -25,8 +24,28 @@ class PowerUp {
     new PVector(200, 610),
     new PVector(220, 850)
   };
+  PVector[] map2TrackPoints = {
+    new PVector(160, 990),
+    new PVector(500, 1400),
+    new PVector(780, 1720),
+    new PVector(1210, 1550),
+    new PVector(1460, 1440),
+    new PVector(1850, 1420),
+    new PVector(1990, 1100),
+    new PVector(1900, 670),
+    new PVector(1290, 720),
+    new PVector(1060, 410),
+    new PVector(640, 270),
+    new PVector(350, 300),
+    new PVector(200, 610),
+    new PVector(220, 850)
+  };
+  PVector[] trackPoints;
 
-  PowerUp() {
+
+  PowerUp(int map) {
+    if (map == 1) trackPoints = map1TrackPoints;
+    else if (map == 2) trackPoints = map2TrackPoints;
     respawn();
   }
 
@@ -41,7 +60,7 @@ class PowerUp {
   void update() {
     // Check if boost ended
     if (boosting && millis() > boostEndTime) {
-      speed -= 10;
+      speed -= 7;
       boosting = false;
     }
 
@@ -62,7 +81,7 @@ class PowerUp {
   }
 
   void giveBoost() {
-    speed += 10;
+    speed += 7;
     boosting = true;
     boostEndTime = millis() + 1500;
   }
