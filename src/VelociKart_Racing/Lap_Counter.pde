@@ -3,8 +3,8 @@ class Lap_Counter {
   float x, y, w, h;      
   boolean visible = false;
 
-  int laps = 0;              // total laps counted
-  boolean playerInZone = false; // track if player is currently inside the lap zone
+  int laps = 0;             
+  boolean playerInZone = false; 
 
   Lap_Counter(float x, float y, float w, float h) {
     this.x = x;
