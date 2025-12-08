@@ -1,4 +1,4 @@
-// Henry Griffin
+// Henry Griffin help with ai
 class Enemy {
   PVector pos, vel;
   int currentTarget = waypoints.length - 1;
@@ -11,7 +11,7 @@ class Enemy {
     pos = new PVector(300, 900);  // starting point
     vel = new PVector(1, 0);      // initial direction
   }
-
+//This block helps with the car following the waypoints/pvectors
   void update() {
     PVector target = waypoints[currentTarget];  //  uses global waypoints
     PVector desired = PVector.sub(target, pos);
