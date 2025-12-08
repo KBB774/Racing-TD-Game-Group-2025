@@ -46,7 +46,8 @@ void setup() {
   btnRestart = new Button("Restart", 220, 150, 160, 50);
   lapZone = new Lap_Counter(70, 890, 400, 40); // x, y, w, h
   lapZone.visible = true; // Set to false to make invisible
-  nitroPU = new PowerUp();
+  nitroPU = new PowerUp(1);
+nitroPU = new PowerUp(2);
   speed = 20;
   playerX = 500;
   playerY = 500;
