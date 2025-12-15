@@ -2,7 +2,7 @@
 class Enemy {
   PVector pos, vel;
   int currentTarget = waypoints.length - 1;
-  float speed = 4;
+  float speed = 10;
   float turnSpeed = 1;
   PImage enemy;
 
